@@ -1,6 +1,7 @@
 {% extends 'base.html'%}
 
 {% block content %}
+{% if user.is_authenticated %}
     {% if messages %}
     {% for message in messages %}
         <div class="alert alert-warning alert-dismissable" role="alert">
@@ -21,6 +22,12 @@
         </tr>
         {% endfor %}
         </table>
+        {% else %}
+        <h3>Add items to the list.</h3>
+
     {% endif %}
+{% else %}
+        <h1>Please Login</h1>
+{% endif %}
 
 {% endblock %}

@@ -17,16 +17,16 @@ def home(request):
     return render(request, "home.html", {})
 '''
 
+from django.contrib.auth.decorators import login_required
+@login_required
 def home(request):
-    def get_queryset(self):
-        return List.objects.filter(acct_active=1, acct_user=request.user)
-
     if request.method == 'POST':
         form = ListForm(request.POST or None)
-
         if form.is_valid():
-            form.save()
-            all_items = List.objects.all
+            list = form.save(commit=False)
+            list.user=request.user
+            list.save()
+            all_items = List.objects.filter(user=request.user)
             messages.success(request, ('Item has been added to the list!'))
             r=render(request, 'home.html', {'all_items': all_items})
             return HttpResponse(r)
@@ -35,7 +35,8 @@ def home(request):
             return "ERROR"
     
     else:
-        all_items = List.objects.all
+        #all_items = List.objects.all
+        all_items = List.objects.filter(user=request.user)
         r=render(request, 'home.html', {'all_items': all_items})
         return HttpResponse(r)
 
@@ -45,3 +46,4 @@ def delete(request, list_id):
     item.delete()
     messages.success(request, ('Item has been deleted.'))
     return redirect('home')
+    

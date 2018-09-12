@@ -9,4 +9,5 @@ class FoodForm(forms.ModelForm):
 class ListForm(forms.ModelForm):
     class Meta:
         model = List
-        fields = ["item"]
+        fields = ("item",)
+        
